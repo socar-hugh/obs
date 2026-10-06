@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Obsidian 열기</title>
+<style>
+  :root { --bg: #fff; --fg: #222; --muted: #777; --accent: #7c3aed; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1e1e1e; --fg: #ddd; --muted: #999; --accent: #a78bfa; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
+         display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 0 16px; }
+  main { max-width: 420px; text-align: center; }
+  a.btn { display: inline-block; margin-top: 12px; padding: 10px 18px; border-radius: 8px; background: var(--accent);
+          color: #fff; text-decoration: none; font-weight: 600; }
+  p { color: var(--muted); font-size: 14px; word-break: break-all; }
+</style>
+</head>
+<body>
+<main>
+  <div id="name">Obsidian으로 여는 중…</div>
+  <a class="btn" id="go" href="#">Obsidian에서 열기</a>
+  <p>자동으로 안 열리면 버튼을 누르세요.</p>
+</main>
+<script>
+  // 노트 경로는 # 뒤(fragment)에만 있다 → 서버로 전송되지 않는다.
+  // 형식: #vault=<vault>&file=<path>
+  var q = new URLSearchParams(location.hash.slice(1));
+  var vault = q.get('vault'), file = q.get('file');
+  if (vault && file) {
+    var url = 'obsidian://open?vault=' + encodeURIComponent(vault) + '&file=' + encodeURIComponent(file);
+    document.getElementById('go').href = url;
+    document.getElementById('name').textContent = file.split('/').pop();
+    location.replace(url);
+  } else {
+    document.getElementById('name').textContent = '열 노트 정보가 없습니다.';
+    document.getElementById('go').style.display = 'none';
+  }
+</script>
+</body>
+</html>
